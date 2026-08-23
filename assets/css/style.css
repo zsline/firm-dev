@@ -13,6 +13,9 @@ html, body{
     margin: 0;
     padding: 0;
 }
+body {
+    font-family: "Inter", sans-serif;
+}
 a{
     text-decoration: none;
     color: inherit;
@@ -173,7 +176,7 @@ button {
     opacity: 0.9;
 }
 .hero__top{
-    margin: 134px auto 26px;
+    margin: clamp(5rem, calc(3.68rem + 6.59vw), 8.38rem) auto 26px;
     width: fit-content;
     text-align: center;
     color: var(--accent-color);
@@ -181,12 +184,12 @@ button {
 }
 
 .hero__top--name{
-    font-size: 48px;
+    font-size: clamp(2.5rem, calc(2.3rem + 0.98vw), 3rem);
     font-weight: 700;
     text-transform: uppercase;
 }
 .hero__top--desc{
-    font-size: 24px;
+    font-size: clamp(1rem, calc(0.8rem + 0.98vw), 1.5rem);
     font-weight: 300;
     text-transform: uppercase;
     padding-top: 6px;
@@ -208,23 +211,23 @@ button {
     align-items: stretch;
 }
 .hero__offer--title{
-    font-size: 48px;
+    font-size: clamp(1.75rem, calc(1.26rem + 2.44vw), 3rem);
     text-transform: uppercase;
-    max-width: 495px;
+    max-width: clamp(18.75rem, calc(13.99rem + 23.78vw), 30.94rem);
     font-weight: 600;
 }
 .hero__offer--title span{
-    font-size: 36px;
+    font-size: clamp(1.5rem, calc(1.21rem + 1.46vw), 2.25rem);
     font-weight: 700;
     color: var(--accent-color);
 }
 .hero__offer--subtitle{
-    font-size: 32px;
+    font-size: clamp(1.25rem, calc(0.96rem + 1.46vw), 2rem);
     font-weight: 600;
     margin-top: 12px;
 }
 .hero__offer--desc{
-    font-size: 24px;
+    font-size: clamp(1.13rem, calc(0.98rem + 0.73vw), 1.5rem);
     font-weight: 600;
     margin-top: 32px;
 }
@@ -317,11 +320,21 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+    color: var(--white);
+}
+.hero__form--label span{
+    display: none;
 }
 .hero__form--label svg{
     width: 34px;
     height: 34px;
     transform: scaleX(-1);
+}
+.is_modal .hero__form--label span{
+    display: block;
+}
+.is_modal .hero__form--label svg{
+    display: none;
 }
 .hero__form--label::before {
     content: '';
@@ -365,6 +378,7 @@ button {
         justify-content: center;
         align-items: center;
         background-color: #3D3D3D;
+        padding: 16px;
         position: fixed;
         top: 0;
         left: 0;
@@ -376,7 +390,20 @@ button {
         width: 100%;
     }
 }
-
+@media (max-width:776px){
+    .hero__offer--btns{
+        flex-direction: column;
+        align-items: center;
+    }
+    .hero__pagination{
+        position: static;
+        text-align: center;
+        margin-top: 24px;
+    }
+    .hero__navigation{
+        justify-content: center;
+    }
+}
 .form-inner {
     background-color: #D9D9D920;
     padding: 32px 42px 16px;

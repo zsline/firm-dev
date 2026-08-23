@@ -28,8 +28,18 @@ slider.addEventListener('mouseleave', () => {
 const heroForm = document.querySelector('.hero__form');
 const heroFormButton = document.querySelector('.hero__form--label');
 
-if(heroForm || heroFormButton){
+if(heroForm && heroFormButton){
   heroFormButton.addEventListener('click', () => {
     heroForm.classList.toggle('is_open');
+    document.body.classList.toggle('is_modal');
   });
+document.addEventListener('click', (e) => {
+  if (
+    heroForm.classList.contains('is_open') &&
+    e.target === heroForm
+  ) {
+    heroForm.classList.remove('is_open');
+    document.body.classList.remove('is_modal');
+  }
+});
 }
