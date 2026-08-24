@@ -1,4 +1,4 @@
-const heroSwiper = new Swiper('.hero__slider', {
+const heroSlider = new Swiper('.hero__slider', {
   loop: true,
   autoplay: {
     delay: 2500,
@@ -11,17 +11,31 @@ const heroSwiper = new Swiper('.hero__slider', {
     nextEl: '.hero-button-next',
     prevEl: '.hero-button-prev',
   },
-  scrollbar: {
-    el: '.swiper-scrollbar',
-  },
 });
-const slider = document.querySelector('.hero__slider');
-slider.addEventListener('mouseenter', () => {
-  heroSwiper.autoplay.stop();
+heroSlider.el.addEventListener('mouseenter', () => {
+  heroSlider.autoplay.stop();
 });
-slider.addEventListener('mouseleave', () => {
-  heroSwiper.autoplay.start();
+
+heroSlider.el.addEventListener('mouseleave', () => {
+  heroSlider.autoplay.start();
 });
+
+
+const servicesSlider = new Swiper('.services__slider', {
+  slidesPerView: 'auto',
+  spaceBetween: 16,
+});
+
+if (window.innerWidth <= 716) {
+  servicesSlider.params.centeredSlides = true;
+  servicesSlider.params.autoplay = {
+    delay: 2500,
+    disableOnInteraction: false,
+  };
+
+  servicesSlider.update();
+  servicesSlider.autoplay.start();
+}
 
 
 // главная Hero форма
