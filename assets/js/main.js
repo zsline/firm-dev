@@ -79,7 +79,6 @@ document.querySelectorAll('.advantages__item--count span').forEach(el => {
 const video = document.querySelector('.services__bg video');
 
 if (video) {
-  video.playbackRate = 0.3;
   const observer = new IntersectionObserver((entries, observer) => {
     if (entries[0].isIntersecting) {
       video.currentTime = 0;
