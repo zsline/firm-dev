@@ -73,3 +73,29 @@ document.querySelectorAll('.advantages__item--count span').forEach(el => {
 
   observer.observe(el);
 });
+
+// ===== Services ======
+
+const video = document.querySelector('.services__bg video');
+
+if (video) {
+  video.playbackRate = 0.3;
+  const observer = new IntersectionObserver((entries, observer) => {
+    if (entries[0].isIntersecting) {
+      video.currentTime = 0;
+      video.play();
+      const stopAt = video.duration / 2;
+      const checkTime = () => {
+        if (video.currentTime >= stopAt) {
+          video.pause();
+          video.removeEventListener('timeupdate', checkTime);
+        }
+      };
+      video.addEventListener('timeupdate', checkTime);
+      // observer.disconnect();
+    }
+  }, {
+    threshold: 0.1
+  });
+  observer.observe(video);
+}
