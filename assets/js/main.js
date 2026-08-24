@@ -43,3 +43,33 @@ document.addEventListener('click', (e) => {
   }
 });
 }
+
+// About счётчик
+
+document.querySelectorAll('.advantages__item--count span').forEach(el => {
+  const target = parseInt(el.textContent, 10);
+  const duration = 3000;
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    if (!entries[0].isIntersecting) return;
+
+    const start = performance.now();
+    el.textContent = '0';
+
+    function animate(time) {
+      const progress = Math.min((time - start) / duration, 1);
+      el.textContent = Math.floor(progress * target);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        el.textContent = target;
+      }
+    }
+
+    requestAnimationFrame(animate);
+    observer.disconnect();
+  });
+
+  observer.observe(el);
+});
