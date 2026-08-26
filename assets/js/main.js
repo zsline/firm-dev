@@ -160,3 +160,47 @@ document.querySelectorAll('.faq__question').forEach(button => {
     }
   });
 });
+
+// ===== Mobile Menu ======
+const burger = document.querySelector('.header__burger');
+const nav = document.querySelector('.header__nav');
+const navLinks = document.querySelectorAll('.header__menu a, .header__nav-btn');
+
+if (burger && nav) {
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('is-active');
+    nav.classList.toggle('is-open');
+    document.body.classList.toggle('is_modal');
+  });
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      burger.classList.remove('is-active');
+      nav.classList.remove('is-open');
+      document.body.classList.remove('is_modal');
+    });
+  });
+}
+
+// ===== Blog Slider ======
+const blogSlider = new Swiper('.blog__slider', {
+  slidesPerView: 1,
+  spaceBetween: 24,
+  loop: true,
+  autoplay: {
+    delay: 4500,
+    disableOnInteraction: false,
+  },
+  pagination: {
+    el: '.blog__pagination',
+    clickable: true,
+  },
+  breakpoints: {
+    768: {
+      slidesPerView: 2,
+    },
+    1024: {
+      slidesPerView: 3,
+    }
+  }
+});
