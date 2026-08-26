@@ -19,7 +19,25 @@
 
   <body>
     <div class="wrapper">
-      <header class="header"></header>
+      <header class="header">
+        <div class="container header__container">
+          <a href="index.html" class="header__logo">
+            <img src="./assets/img/logo.svg" alt="FIRM.UA">
+          </a>
+          <nav class="header__nav">
+            <ul class="header__menu">
+              <li><a href="index.html">Головна</a></li>
+              <li><a href="#about">Про нас</a></li>
+              <li><a href="#services">Послуги</a></li>
+              <li><a href="#">Тарифи</a></li>
+            </ul>
+          </nav>
+          <div class="header__contacts">
+            <a href="tel:+380441234567" class="header__phone">+38 (044) 123-45-67</a>
+            <a href="#feedback" class="btn-main btn-primary header__btn">Зворотний зв'язок</a>
+          </div>
+        </div>
+      </header>
       <main class="main">
         <section class="hero">
           <div class="hero__form--label">
@@ -1999,7 +2017,7 @@
           </div>
         </section>
       </main>
-      <footer class="footer">
+      <footer class="footer" id="feedback">
         <div class="container">
           <div class="feedback__wrapper">
             <div class="feedback__info">
@@ -2067,7 +2085,9 @@
           </div>
           <div class="footer__wrapper">
             <div class="footer__col footer__col--info">
-              <a href="index.html" class="footer__logo">FIRM<span>.UA</span></a>
+              <a href="index.html" class="footer__logo">
+                <img src="./assets/img/logo.svg" alt="FIRM.UA">
+              </a>
               <p class="footer__desc">
                 FIRM.UA — комплексний сервіс для розвитку та супроводу
                 приватного бізнесу в Україні. Допомагаємо на всіх етапах: від

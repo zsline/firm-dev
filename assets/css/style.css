@@ -70,14 +70,101 @@ button {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 2;
-    padding: 12px 0;
+    z-index: 10;
+    padding: 20px 0;
     color: var(--white);
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    text-transform: uppercase;
     font-family: "Inter", sans-serif;
+}
+
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__logo {
+    display: flex;
+    align-items: center;
+}
+
+.header__logo img {
+    height: 40px;
+    width: auto;
+}
+
+.header__nav {
+    display: flex;
+    align-items: center;
+}
+
+.header__menu {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header__menu a {
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+.header__menu a:hover {
+    color: var(--accent-color);
+}
+
+.header__contacts {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.header__phone {
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 700;
+    transition: color 0.3s;
+}
+
+.header__phone:hover {
+    color: var(--accent-color);
+}
+
+.header__btn {
+    height: 38px;
+    padding: 0 20px;
+    border-radius: 19px;
+    font-size: 13px;
+    margin: 0;
+}
+
+@media (max-width: 992px) {
+    .header__menu {
+        gap: 20px;
+    }
+    .header__phone {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 15px 0;
+    }
+    .header__nav {
+        display: none;
+    }
+    .header__btn {
+        height: 34px;
+        padding: 0 16px;
+        font-size: 11px;
+        border-radius: 17px;
+    }
 }
 
 .container {
@@ -1069,23 +1156,14 @@ button {
 }
 
 .footer__logo {
-    font-family: "Inter", sans-serif;
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--white);
-    text-transform: uppercase;
     margin-bottom: 20px;
-    letter-spacing: 1px;
     display: inline-block;
-    transition: color 0.3s;
 }
 
-.footer__logo span {
-    color: var(--accent-color);
-}
-
-.footer__logo:hover {
-    color: var(--accent-color);
+.footer__logo img {
+    height: 40px;
+    width: auto;
+    display: block;
 }
 
 .footer__desc {
