@@ -112,3 +112,51 @@ if (video) {
   });
   observer.observe(video);
 }
+
+// ===== Reviews Slider ======
+const reviewsSlider = new Swiper('.reviews__slider', {
+  slidesPerView: 1,
+  spaceBetween: 24,
+  loop: true,
+  autoplay: {
+    delay: 4000,
+    disableOnInteraction: false,
+  },
+  pagination: {
+    el: '.reviews__pagination',
+    clickable: true,
+  },
+  breakpoints: {
+    768: {
+      slidesPerView: 2,
+    },
+    1024: {
+      slidesPerView: 3,
+    }
+  }
+});
+
+// ===== FAQ Accordion ======
+document.querySelectorAll('.faq__question').forEach(button => {
+  button.addEventListener('click', () => {
+    const item = button.closest('.faq__item');
+    const isActive = item.classList.contains('is-active');
+
+    // Close all other items
+    document.querySelectorAll('.faq__item').forEach(otherItem => {
+      otherItem.classList.remove('is-active');
+      const otherAnswer = otherItem.querySelector('.faq__answer');
+      if (otherAnswer) {
+        otherAnswer.style.maxHeight = null;
+      }
+    });
+
+    if (!isActive) {
+      item.classList.add('is-active');
+      const answer = item.querySelector('.faq__answer');
+      if (answer) {
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    }
+  });
+});
