@@ -1,85 +1,3 @@
-// ==================== Preloader & Video Control ====================
-(function initPreloader() {
-  const preloader = document.getElementById('preloader');
-  const preloaderBar = document.getElementById('preloaderBar');
-  const preloaderPercent = document.getElementById('preloaderPercent');
-  const allVideos = document.querySelectorAll('video');
-
-  // Immediately pause all videos on script execution
-  allVideos.forEach(v => {
-    try {
-      v.pause();
-      v.currentTime = 0;
-    } catch (e) {}
-  });
-
-  document.body.classList.add('preloader-active');
-
-  let progress = 0;
-  let isWindowLoaded = false;
-  let finished = false;
-
-  function updateDisplay(val) {
-    const rounded = Math.min(100, Math.floor(val));
-    if (preloaderBar) preloaderBar.style.width = rounded + '%';
-    if (preloaderPercent) preloaderPercent.textContent = rounded;
-  }
-
-  function finishPreloader() {
-    if (finished) return;
-    finished = true;
-
-    if (preloader) {
-      preloader.classList.add('is-hidden');
-    }
-    document.body.classList.remove('preloader-active');
-
-    // Start all background videos ONLY AFTER preloader has fully completed its fade-out (650ms)
-    setTimeout(() => {
-      startPageVideos();
-    }, 650);
-  }
-
-  function step() {
-    if (!isWindowLoaded) {
-      if (progress < 85) {
-        progress += (85 - progress) * 0.05 + 0.4;
-      }
-    } else {
-      progress += (100 - progress) * 0.15 + 1.5;
-    }
-
-    if (progress >= 99.5) {
-      updateDisplay(100);
-      finishPreloader();
-    } else {
-      updateDisplay(progress);
-      requestAnimationFrame(step);
-    }
-  }
-
-  window.addEventListener('load', () => {
-    isWindowLoaded = true;
-  });
-
-  if (document.readyState === 'complete') {
-    isWindowLoaded = true;
-  }
-
-  // Safety fallback for mobile browsers (e.g. Mi Browser) if load event is delayed
-  setTimeout(() => {
-    isWindowLoaded = true;
-  }, 3000);
-
-  // Maximum safety timeout to hide preloader after 5s no matter what
-  setTimeout(() => {
-    updateDisplay(100);
-    finishPreloader();
-  }, 5000);
-
-  requestAnimationFrame(step);
-})();
-
 // ===== Hero Slider =====
 const heroSliderEl = document.querySelector('.hero__slider');
 if (heroSliderEl) {
@@ -334,6 +252,76 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+// ==================== Preloader & Video Control ====================
+(function initPreloader() {
+  const preloader = document.getElementById('preloader');
+  const preloaderBar = document.getElementById('preloaderBar');
+  const preloaderPercent = document.getElementById('preloaderPercent');
+  const allVideos = document.querySelectorAll('video');
+
+  // Immediately pause all videos on script execution
+  allVideos.forEach(v => {
+    try {
+      v.pause();
+      v.currentTime = 0;
+    } catch (e) {}
+  });
+
+  document.body.classList.add('preloader-active');
+
+  let progress = 0;
+  let isWindowLoaded = false;
+  let finished = false;
+
+  function updateDisplay(val) {
+    const rounded = Math.min(100, Math.floor(val));
+    if (preloaderBar) preloaderBar.style.width = rounded + '%';
+    if (preloaderPercent) preloaderPercent.textContent = rounded;
+  }
+
+  function finishPreloader() {
+    if (finished) return;
+    finished = true;
+
+    setTimeout(() => {
+      if (preloader) {
+        preloader.classList.add('is-hidden');
+      }
+      document.body.classList.remove('preloader-active');
+
+      // Start all videos ONLY after preloader finishes
+      startPageVideos();
+    }, 250);
+  }
+
+  function step() {
+    if (!isWindowLoaded) {
+      if (progress < 85) {
+        progress += (85 - progress) * 0.05 + 0.4;
+      }
+    } else {
+      progress += (100 - progress) * 0.15 + 1.5;
+    }
+
+    if (progress >= 99.5) {
+      updateDisplay(100);
+      finishPreloader();
+    } else {
+      updateDisplay(progress);
+      requestAnimationFrame(step);
+    }
+  }
+
+  window.addEventListener('load', () => {
+    isWindowLoaded = true;
+  });
+
+  if (document.readyState === 'complete') {
+    isWindowLoaded = true;
+  }
+
+  requestAnimationFrame(step);
+})();
 
 function startPageVideos() {
 
