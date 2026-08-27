@@ -29,15 +29,15 @@
     if (finished) return;
     finished = true;
 
-    setTimeout(() => {
-      if (preloader) {
-        preloader.classList.add('is-hidden');
-      }
-      document.body.classList.remove('preloader-active');
+    if (preloader) {
+      preloader.classList.add('is-hidden');
+    }
+    document.body.classList.remove('preloader-active');
 
-      // Start all videos ONLY after preloader finishes
+    // Start all background videos ONLY AFTER preloader has fully completed its fade-out (650ms)
+    setTimeout(() => {
       startPageVideos();
-    }, 250);
+    }, 650);
   }
 
   function step() {
@@ -339,14 +339,28 @@ function startPageVideos() {
   // 1. Hero and Page Services background videos
   const autoplayVideos = document.querySelectorAll('video[data-autoplay], .hero-bg video, .page-services--bg video');
   autoplayVideos.forEach(video => {
-    video.play().catch(err => {
-      console.log('Video play prevented or paused:', err);
-    });
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', 'true');
+    video.setAttribute('x5-playsinline', 'true');
+    video.setAttribute('x5-video-player-type', 'h5');
+    video.setAttribute('x5-video-player-fullscreen', 'false');
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.log('Video play prevented or paused:', err);
+      });
+    }
   });
 
   // 2. Page Services video playback rate behavior
   const videoServices = document.querySelector('.page-services--bg video');
   if (videoServices) {
+    videoServices.muted = true;
+    videoServices.playsInline = true;
     videoServices.play().catch(() => {});
     videoServices.addEventListener('timeupdate', () => {
       if (videoServices.duration) {
@@ -362,6 +376,8 @@ function startPageVideos() {
   // 3. Services bg video with IntersectionObserver
   const servicesVideo = document.querySelector('.services__bg video');
   if (servicesVideo) {
+    servicesVideo.muted = true;
+    servicesVideo.playsInline = true;
     const observer = new IntersectionObserver((entries) => {
       if (entries[0] && entries[0].isIntersecting) {
         servicesVideo.currentTime = 0;
