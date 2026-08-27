@@ -100,30 +100,7 @@ document.querySelectorAll('.advantages__item--count span').forEach(el => {
   observer.observe(el);
 });
 
-// ===== Services ======
-
-const video = document.querySelector('.services__bg video');
-
-if (video) {
-  const observer = new IntersectionObserver((entries, observer) => {
-    if (entries[0].isIntersecting) {
-      video.currentTime = 0;
-      video.play();
-      const stopAt = video.duration / 2;
-      const checkTime = () => {
-        if (video.currentTime >= stopAt) {
-          video.pause();
-          video.removeEventListener('timeupdate', checkTime);
-        }
-      };
-      video.addEventListener('timeupdate', checkTime);
-      // observer.disconnect();
-    }
-  }, {
-    threshold: 0.1
-  });
-  observer.observe(video);
-}
+// ===== Services Slider & Video management in startPageVideos =====
 
 // ===== Reviews Slider ======
 const reviewsSlider = new Swiper('.reviews__slider', {
@@ -272,18 +249,120 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// ==== Page Services ===
-const videoServices = document.querySelector('.page-services--bg video');
+// ==================== Preloader & Video Control ====================
+(function initPreloader() {
+  const preloader = document.getElementById('preloader');
+  const preloaderBar = document.getElementById('preloaderBar');
+  const preloaderPercent = document.getElementById('preloaderPercent');
+  const allVideos = document.querySelectorAll('video');
 
-if (videoServices) {
-  videoServices.play();
-
-  videoServices.addEventListener('timeupdate', () => {
-    const progress = videoServices.currentTime / videoServices.duration;
-
-    if (progress > 0.6) {
-      const speed = 1 - ((progress - 0.6) / 0.4) * 0.8;
-      videoServices.playbackRate = Math.max(0.2, speed);
-    }
+  // Immediately pause all videos on script execution
+  allVideos.forEach(v => {
+    try {
+      v.pause();
+      v.currentTime = 0;
+    } catch (e) {}
   });
+
+  document.body.classList.add('preloader-active');
+
+  let progress = 0;
+  let isWindowLoaded = false;
+  let finished = false;
+
+  function updateDisplay(val) {
+    const rounded = Math.min(100, Math.floor(val));
+    if (preloaderBar) preloaderBar.style.width = rounded + '%';
+    if (preloaderPercent) preloaderPercent.textContent = rounded;
+  }
+
+  function finishPreloader() {
+    if (finished) return;
+    finished = true;
+
+    setTimeout(() => {
+      if (preloader) {
+        preloader.classList.add('is-hidden');
+      }
+      document.body.classList.remove('preloader-active');
+
+      // Start all videos ONLY after preloader finishes
+      startPageVideos();
+    }, 250);
+  }
+
+  function step() {
+    if (!isWindowLoaded) {
+      if (progress < 85) {
+        progress += (85 - progress) * 0.05 + 0.4;
+      }
+    } else {
+      progress += (100 - progress) * 0.15 + 1.5;
+    }
+
+    if (progress >= 99.5) {
+      updateDisplay(100);
+      finishPreloader();
+    } else {
+      updateDisplay(progress);
+      requestAnimationFrame(step);
+    }
+  }
+
+  window.addEventListener('load', () => {
+    isWindowLoaded = true;
+  });
+
+  if (document.readyState === 'complete') {
+    isWindowLoaded = true;
+  }
+
+  requestAnimationFrame(step);
+})();
+
+function startPageVideos() {
+  // 1. Hero and Page Services background videos
+  const autoplayVideos = document.querySelectorAll('video[data-autoplay], .hero-bg video, .page-services--bg video');
+  autoplayVideos.forEach(video => {
+    video.play().catch(err => {
+      console.log('Video play prevented or paused:', err);
+    });
+  });
+
+  // 2. Page Services video playback rate behavior
+  const videoServices = document.querySelector('.page-services--bg video');
+  if (videoServices) {
+    videoServices.play().catch(() => {});
+    videoServices.addEventListener('timeupdate', () => {
+      if (videoServices.duration) {
+        const progress = videoServices.currentTime / videoServices.duration;
+        if (progress > 0.6) {
+          const speed = 1 - ((progress - 0.6) / 0.4) * 0.8;
+          videoServices.playbackRate = Math.max(0.2, speed);
+        }
+      }
+    });
+  }
+
+  // 3. Services bg video with IntersectionObserver
+  const servicesVideo = document.querySelector('.services__bg video');
+  if (servicesVideo) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        servicesVideo.currentTime = 0;
+        servicesVideo.play().catch(() => {});
+        const stopAt = servicesVideo.duration / 2;
+        const checkTime = () => {
+          if (servicesVideo.duration && servicesVideo.currentTime >= stopAt) {
+            servicesVideo.pause();
+            servicesVideo.removeEventListener('timeupdate', checkTime);
+          }
+        };
+        servicesVideo.addEventListener('timeupdate', checkTime);
+      }
+    }, {
+      threshold: 0.1
+    });
+    observer.observe(servicesVideo);
+  }
 }
