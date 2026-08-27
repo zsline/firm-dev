@@ -35,9 +35,9 @@
     document.body.classList.remove('preloader-active');
 
     // Start all background videos ONLY AFTER preloader has fully completed its fade-out (650ms)
-    // setTimeout(() => {
-    //   startPageVideos();
-    // }, 650);
+    setTimeout(() => {
+      startPageVideos();
+    }, 650);
   }
 
   function step() {
@@ -336,64 +336,83 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function startPageVideos() {
-  // 1. Hero and Page Services background videos
-  const autoplayVideos = document.querySelectorAll('video[data-autoplay], .hero-bg video, .page-services--bg video');
-  autoplayVideos.forEach(video => {
+
+  // Hero background
+  const heroVideos = document.querySelectorAll(
+    'video[data-autoplay], .hero-bg video'
+  );
+
+  heroVideos.forEach(video => {
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
     video.setAttribute('playsinline', '');
-    video.setAttribute('webkit-playsinline', 'true');
-    video.setAttribute('x5-playsinline', 'true');
-    video.setAttribute('x5-video-player-type', 'h5');
-    video.setAttribute('x5-video-player-fullscreen', 'false');
+    video.setAttribute('webkit-playsinline', '');
 
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(err => {
-        console.log('Video play prevented or paused:', err);
-      });
-    }
+    video.play().catch(() => {});
   });
 
-  // 2. Page Services video playback rate behavior
+  // Page Services background
   const videoServices = document.querySelector('.page-services--bg video');
+
   if (videoServices) {
     videoServices.muted = true;
+    videoServices.defaultMuted = true;
     videoServices.playsInline = true;
+
+    videoServices.setAttribute('playsinline', '');
+    videoServices.setAttribute('webkit-playsinline', '');
+    videoServices.setAttribute('disablepictureinpicture', '');
+    videoServices.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+
     videoServices.play().catch(() => {});
+
     videoServices.addEventListener('timeupdate', () => {
-      if (videoServices.duration) {
-        const progress = videoServices.currentTime / videoServices.duration;
-        if (progress > 0.6) {
-          const speed = 1 - ((progress - 0.6) / 0.4) * 0.8;
-          videoServices.playbackRate = Math.max(0.2, speed);
-        }
+      if (!videoServices.duration) return;
+
+      const progress =
+        videoServices.currentTime / videoServices.duration;
+
+      if (progress > 0.6) {
+        const speed =
+          1 - ((progress - 0.6) / 0.4) * 0.8;
+
+        videoServices.playbackRate = Math.max(0.2, speed);
       }
     });
   }
 
-  // 3. Services bg video with IntersectionObserver
+  // Services background
   const servicesVideo = document.querySelector('.services__bg video');
+
   if (servicesVideo) {
     servicesVideo.muted = true;
     servicesVideo.playsInline = true;
+
     const observer = new IntersectionObserver((entries) => {
       if (entries[0] && entries[0].isIntersecting) {
+
         servicesVideo.currentTime = 0;
         servicesVideo.play().catch(() => {});
+
         const stopAt = servicesVideo.duration / 2;
+
         const checkTime = () => {
-          if (servicesVideo.duration && servicesVideo.currentTime >= stopAt) {
+          if (
+            servicesVideo.duration &&
+            servicesVideo.currentTime >= stopAt
+          ) {
             servicesVideo.pause();
             servicesVideo.removeEventListener('timeupdate', checkTime);
           }
         };
+
         servicesVideo.addEventListener('timeupdate', checkTime);
       }
     }, {
       threshold: 0.1
     });
+
     observer.observe(servicesVideo);
   }
 }
