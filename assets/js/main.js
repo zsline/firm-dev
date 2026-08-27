@@ -362,9 +362,17 @@ if (videoServices) {
   videoServices.playsInline = true;
   videoServices.controls = false;
 
-  videoServices.addEventListener('loadedmetadata', () => {
+  const playVideo = () => {
     videoServices.play().catch(() => {});
-  }, { once: true });
+  };
+
+  if (videoServices.readyState >= 1) {
+    playVideo();
+  } else {
+    videoServices.addEventListener('loadedmetadata', playVideo, {
+      once: true
+    });
+  }
 
   videoServices.addEventListener('timeupdate', () => {
 
