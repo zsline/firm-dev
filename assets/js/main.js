@@ -35,9 +35,9 @@
     document.body.classList.remove('preloader-active');
 
     // Start all background videos ONLY AFTER preloader has fully completed its fade-out (650ms)
-    setTimeout(() => {
-      startPageVideos();
-    }, 650);
+    // setTimeout(() => {
+    //   startPageVideos();
+    // }, 650);
   }
 
   function step() {
