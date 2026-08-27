@@ -353,34 +353,36 @@ function startPageVideos() {
   });
 
   // Page Services background
-  const videoServices = document.querySelector('.page-services--bg video');
+const videoServices = document.querySelector('.page-services--bg video');
 
-  if (videoServices) {
-    videoServices.muted = true;
-    videoServices.defaultMuted = true;
-    videoServices.playsInline = true;
+if (videoServices) {
 
-    videoServices.setAttribute('playsinline', '');
-    videoServices.setAttribute('webkit-playsinline', '');
-    videoServices.setAttribute('disablepictureinpicture', '');
-    videoServices.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+  videoServices.muted = true;
+  videoServices.defaultMuted = true;
+  videoServices.playsInline = true;
+  videoServices.controls = false;
 
+  videoServices.addEventListener('loadedmetadata', () => {
     videoServices.play().catch(() => {});
+  }, { once: true });
 
-    videoServices.addEventListener('timeupdate', () => {
-      if (!videoServices.duration) return;
+  videoServices.addEventListener('timeupdate', () => {
 
-      const progress =
-        videoServices.currentTime / videoServices.duration;
+    if (!videoServices.duration) return;
 
-      if (progress > 0.6) {
-        const speed =
-          1 - ((progress - 0.6) / 0.4) * 0.8;
+    const progress =
+      videoServices.currentTime / videoServices.duration;
 
-        videoServices.playbackRate = Math.max(0.2, speed);
-      }
-    });
-  }
+    if (progress > 0.6) {
+      const speed =
+        1 - ((progress - 0.6) / 0.4) * 0.8;
+
+      videoServices.playbackRate = Math.max(0.2, speed);
+    }
+
+  });
+
+}
 
   // Services background
   const servicesVideo = document.querySelector('.services__bg video');
