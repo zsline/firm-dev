@@ -252,20 +252,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-// ==================== Preloader & Video Control ====================
+
+const videoServices = document.querySelector('.page-services--bg video');
+
+if (videoServices) {
+  videoServices.play();
+
+  videoServices.addEventListener('timeupdate', () => {
+    const progress = videoServices.currentTime / videoServices.duration;
+
+    if (progress > 0.5) {
+      const speed = 1 - ((progress - 0.5) / 0.5) * 0.8;
+      videoServices.playbackRate = Math.max(0.2, speed);
+    }
+  });
+}
+// ==================== Preloader ====================
 (function initPreloader() {
   const preloader = document.getElementById('preloader');
   const preloaderBar = document.getElementById('preloaderBar');
   const preloaderPercent = document.getElementById('preloaderPercent');
-  const allVideos = document.querySelectorAll('video');
-
-  // Immediately pause all videos on script execution
-  allVideos.forEach(v => {
-    try {
-      v.pause();
-      v.currentTime = 0;
-    } catch (e) {}
-  });
 
   document.body.classList.add('preloader-active');
 
@@ -288,9 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
         preloader.classList.add('is-hidden');
       }
       document.body.classList.remove('preloader-active');
-
-      // Start all videos ONLY after preloader finishes
-      startPageVideos();
     }, 250);
   }
 
@@ -322,95 +325,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   requestAnimationFrame(step);
 })();
-
-function startPageVideos() {
-
-  // Hero background
-  const heroVideos = document.querySelectorAll(
-    'video[data-autoplay], .hero-bg video'
-  );
-
-  heroVideos.forEach(video => {
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
-    video.setAttribute('playsinline', '');
-    video.setAttribute('webkit-playsinline', '');
-
-    video.play().catch(() => {});
-  });
-
-  // Page Services background
-const videoServices = document.querySelector('.page-services--bg video');
-
-if (videoServices) {
-
-  videoServices.muted = true;
-  videoServices.defaultMuted = true;
-  videoServices.playsInline = true;
-  videoServices.controls = false;
-
-  const playVideo = () => {
-    videoServices.play().catch(() => {});
-  };
-
-  if (videoServices.readyState >= 1) {
-    playVideo();
-  } else {
-    videoServices.addEventListener('loadedmetadata', playVideo, {
-      once: true
-    });
-  }
-
-  videoServices.addEventListener('timeupdate', () => {
-
-    if (!videoServices.duration) return;
-
-    const progress =
-      videoServices.currentTime / videoServices.duration;
-
-    if (progress > 0.6) {
-      const speed =
-        1 - ((progress - 0.6) / 0.4) * 0.8;
-
-      videoServices.playbackRate = Math.max(0.2, speed);
-    }
-
-  });
-
-}
-
-  // Services background
-  const servicesVideo = document.querySelector('.services__bg video');
-
-  if (servicesVideo) {
-    servicesVideo.muted = true;
-    servicesVideo.playsInline = true;
-
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0] && entries[0].isIntersecting) {
-
-        servicesVideo.currentTime = 0;
-        servicesVideo.play().catch(() => {});
-
-        const stopAt = servicesVideo.duration / 2;
-
-        const checkTime = () => {
-          if (
-            servicesVideo.duration &&
-            servicesVideo.currentTime >= stopAt
-          ) {
-            servicesVideo.pause();
-            servicesVideo.removeEventListener('timeupdate', checkTime);
-          }
-        };
-
-        servicesVideo.addEventListener('timeupdate', checkTime);
-      }
-    }, {
-      threshold: 0.1
-    });
-
-    observer.observe(servicesVideo);
-  }
-}
