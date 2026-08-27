@@ -1,24 +1,36 @@
-const heroSlider = new Swiper('.hero__slider', {
-  loop: true,
-  autoplay: {
-    delay: 2500,
-    disableOnInteraction: false,
-  },
-  pagination: {
-    el: '.hero__pagination',
-  },
-  navigation: {
-    nextEl: '.hero-button-next',
-    prevEl: '.hero-button-prev',
-  },
-});
-heroSlider.el.addEventListener('mouseenter', () => {
-  heroSlider.autoplay.stop();
-});
+const heroSliderEl = document.querySelector('.hero__slider');
 
-heroSlider.el.addEventListener('mouseleave', () => {
-  heroSlider.autoplay.start();
-});
+if (heroSliderEl) {
+
+  const heroSlider = new Swiper(heroSliderEl, {
+
+    loop: true,
+
+    autoplay: {
+      delay: 2500,
+      disableOnInteraction: false,
+    },
+
+    pagination: {
+      el: '.hero__pagination',
+    },
+
+    navigation: {
+      nextEl: '.hero-button-next',
+      prevEl: '.hero-button-prev',
+    },
+
+  });
+
+  heroSliderEl.addEventListener('mouseenter', () => {
+    heroSlider.autoplay.stop();
+  });
+
+  heroSliderEl.addEventListener('mouseleave', () => {
+    heroSlider.autoplay.start();
+  });
+
+}
 
 
 const servicesSlider = new Swiper('.services__slider', {
@@ -183,24 +195,95 @@ if (burger && nav) {
 }
 
 // ===== Blog Slider ======
-const blogSlider = new Swiper('.blog__slider', {
-  slidesPerView: 1,
-  spaceBetween: 24,
-  loop: true,
-  autoplay: {
-    delay: 4500,
-    disableOnInteraction: false,
-  },
-  pagination: {
-    el: '.blog__pagination',
-    clickable: true,
-  },
-  breakpoints: {
-    768: {
-      slidesPerView: 2,
+const blogSliderEl = document.querySelector('.blog__slider');
+if (blogSliderEl) {
+  const blogSlider = new Swiper('.blog__slider', {
+    slidesPerView: 1,
+    spaceBetween: 24,
+    loop: true,
+    autoplay: {
+      delay: 4500,
+      disableOnInteraction: false,
     },
-    1024: {
-      slidesPerView: 3,
+    pagination: {
+      el: '.blog__pagination',
+      clickable: true,
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      }
     }
+  });
+}
+
+// ===== Blog Archive Filter and Search =====
+document.addEventListener('DOMContentLoaded', () => {
+  const archiveContainer = document.querySelector('.blog-archive');
+  if (!archiveContainer) return;
+
+  const filterBtns = document.querySelectorAll('.blog-filter-btn');
+  const searchInput = document.querySelector('.blog-search__input');
+  const blogItems = document.querySelectorAll('.blog-archive__item');
+
+  let activeCategory = 'all';
+  let searchQuery = '';
+
+  function filterArticles() {
+    blogItems.forEach(item => {
+      const category = item.getAttribute('data-category');
+      const title = item.querySelector('.blog__card-title').textContent.toLowerCase();
+      
+      const matchesCategory = activeCategory === 'all' || category === activeCategory;
+      const matchesSearch = title.includes(searchQuery);
+
+      if (matchesCategory && matchesSearch) {
+        item.classList.remove('hide');
+        item.style.opacity = '0';
+        setTimeout(() => {
+          item.style.opacity = '1';
+        }, 50);
+      } else {
+        item.classList.add('hide');
+      }
+    });
+  }
+
+  // Filter Buttons
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.getAttribute('data-category');
+      filterArticles();
+    });
+  });
+
+  // Search Input
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      filterArticles();
+    });
   }
 });
+
+
+// ==== Page Services ===
+const videoServices = document.querySelector('.page-services--bg video');
+
+if (videoServices) {
+  videoServices.play();
+
+  videoServices.addEventListener('timeupdate', () => {
+    const progress = videoServices.currentTime / videoServices.duration;
+
+    if (progress > 0.6) {
+      const speed = 1 - ((progress - 0.6) / 0.4) * 0.8;
+      videoServices.playbackRate = Math.max(0.2, speed);
+    }
+  });
+}
