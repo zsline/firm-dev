@@ -251,6 +251,96 @@ button {
     color: var(--accent-color);
 }
 
+/* ==================== Sub Menu Dropdown ==================== */
+.header__menu .menu-item-has-children {
+    position: relative;
+}
+
+.header__menu .menu-item-has-children > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.header__menu .menu-item-has-children > a::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.3s ease;
+    margin-left: 2px;
+}
+
+.header__menu .menu-item-has-children:hover > a::after {
+    transform: rotate(-135deg) translateY(-2px);
+}
+
+.sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    min-width: 200px;
+    background: rgba(24, 21, 16, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(225, 174, 12, 0.25);
+    border-radius: 12px;
+    padding: 10px 0;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    z-index: 100;
+}
+
+.sub-menu::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+}
+
+.header__menu .menu-item-has-children:hover > .sub-menu,
+.header__menu .menu-item-has-children:focus-within > .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+.sub-menu li {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.sub-menu a {
+    display: block;
+    padding: 10px 20px;
+    color: #FCFCFC !important;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.sub-menu a:hover {
+    background: rgba(225, 174, 12, 0.15);
+    color: var(--accent-color) !important;
+    padding-left: 24px;
+}
+
 .header__contacts {
     display: flex;
     align-items: center;
@@ -410,6 +500,41 @@ button {
         font-size: 20px;
     }
 
+    .sub-menu {
+        position: static;
+        transform: none !important;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: 8px 0 0 0;
+        min-width: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sub-menu::before {
+        display: none;
+    }
+
+    .sub-menu a {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.75) !important;
+        text-align: center;
+        padding: 6px 0;
+    }
+
+    .sub-menu a:hover {
+        background: transparent;
+        padding-left: 0;
+        color: var(--accent-color) !important;
+    }
+
     .header__nav-contacts {
         display: flex;
         flex-direction: column;
@@ -543,7 +668,7 @@ button {
 }
 
 .services-hero {
-    min-height: auto;
+    min-height: 100vh;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -3556,22 +3681,30 @@ button {
         gap: 14px;
         flex-direction: column-reverse;
     }
-    .services-single__slide-content{
+
+    .services-single__slide-content {
         max-width: 100%;
     }
-    .services-single__slide-media{
+
+    .services-single__slide-media {
         max-width: 280px;
     }
-    .services-single__slide-badge{
+
+    .services-single__slide-badge {
         margin: 0 auto 24px;
     }
-} 
+}
 
 /* ==================== Services Single Variants ==================== */
 .services-single-variants {
     padding-top: 70px;
     padding-bottom: 70px;
     background-color: var(--white);
+}
+
+.services-single-variants h2 {
+    text-align: center;
+    margin-bottom: 50px;
 }
 
 .variants-title {
@@ -3854,6 +3987,7 @@ button {
         max-width: 440px;
         margin: 0 auto;
     }
+
     .video-card__title {
         font-size: 18px;
     }
