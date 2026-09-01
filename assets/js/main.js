@@ -201,6 +201,42 @@ if (blogSliderEl) {
   });
 }
 
+// ===== Services Single Slider ======
+const servicesSingleSliderEl = document.querySelector('.services-single__slider');
+if (servicesSingleSliderEl) {
+  const servicesSingleSlider = new Swiper(servicesSingleSliderEl, {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: true,
+    speed: 800,
+    autoplay: {
+      delay: 3500,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
+    pagination: {
+      el: '.services-single__slider .swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.services-single__slider .services-slider__next',
+      prevEl: '.services-single__slider .services-slider__prev',
+    },
+  });
+
+  servicesSingleSliderEl.addEventListener('mouseenter', () => {
+    if (servicesSingleSlider && servicesSingleSlider.autoplay && typeof servicesSingleSlider.autoplay.stop === 'function') {
+      servicesSingleSlider.autoplay.stop();
+    }
+  });
+
+  servicesSingleSliderEl.addEventListener('mouseleave', () => {
+    if (servicesSingleSlider && servicesSingleSlider.autoplay && typeof servicesSingleSlider.autoplay.start === 'function') {
+      servicesSingleSlider.autoplay.start();
+    }
+  });
+}
+
 // ===== Blog Archive Filter and Search =====
 document.addEventListener('DOMContentLoaded', () => {
   const archiveContainer = document.querySelector('.blog-archive');
