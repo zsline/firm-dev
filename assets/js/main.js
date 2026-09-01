@@ -206,7 +206,6 @@ const servicesSingleSliderEl = document.querySelector('.services-single__slider'
 if (servicesSingleSliderEl) {
   const servicesSingleSlider = new Swiper(servicesSingleSliderEl, {
     slidesPerView: 1,
-    spaceBetween: 30,
     loop: true,
     speed: 800,
     autoplay: {
@@ -222,6 +221,17 @@ if (servicesSingleSliderEl) {
       nextEl: '.services-single__slider .services-slider__next',
       prevEl: '.services-single__slider .services-slider__prev',
     },
+    breakpoints: {
+      320: {
+        spaceBetween: 16,
+      },
+      768: {
+        spaceBetween: 24,
+      },
+      1024: {
+        spaceBetween: 30,
+      }
+    }
   });
 
   servicesSingleSliderEl.addEventListener('mouseenter', () => {
@@ -298,7 +308,7 @@ function startPageVideos() {
   videoServices.playsInline = true;
   videoServices.controls = false;
 
-  videoServices.play().catch(() => {});
+  videoServices.play().catch(() => { });
 
   videoServices.addEventListener('timeupdate', () => {
     if (!videoServices.duration) return;
@@ -311,7 +321,7 @@ function startPageVideos() {
     }
   });
 
-  
+
 }
 const servicesVideo = document.querySelector('.services__bg video');
 
@@ -319,18 +329,18 @@ if (servicesVideo) {
   servicesVideo.muted = true;
   servicesVideo.playsInline = true;
 
-const observer = new IntersectionObserver((entries) => {
-  const entry = entries[0];
+  const observer = new IntersectionObserver((entries) => {
+    const entry = entries[0];
 
-  if (entry.isIntersecting) {
-    servicesVideo.currentTime = 0;
-    servicesVideo.play().catch(() => {});
-  } else {
-    servicesVideo.pause();
-  }
-}, {
-  threshold: 0.1
-});
+    if (entry.isIntersecting) {
+      servicesVideo.currentTime = 0;
+      servicesVideo.play().catch(() => { });
+    } else {
+      servicesVideo.pause();
+    }
+  }, {
+    threshold: 0.1
+  });
 
   servicesVideo.addEventListener('timeupdate', () => {
     if (
